@@ -54,7 +54,7 @@ module.exports.login = (req, res, next) => {
 
   function createToken(user) {
     const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : devJwtkey, { expiresIn: '7d' });
-    res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, path: '/' }).send({ email, password });
+    res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7 }).send({ email, password });
   }
 
   User.findOne({ email }).select('+password')
@@ -71,7 +71,5 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.clearCookie('jwt', { path: '/' }).send({ message: 'Выход' });
+  res.clearCookie('jwt').send({ message: 'Выход' });
 };
-
-// , domain: 'tii-mesto.students.nomoredomains.work'
