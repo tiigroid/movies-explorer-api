@@ -14,11 +14,11 @@ const { mongoDbLocalDefault } = require('./utils/dev-config');
 const app = express();
 const { PORT = 3000, DB_ADDRESS = mongoDbLocalDefault } = process.env;
 
-app.use(limiter);
-app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(requestLogger);
+app.use(helmet());
+app.use(limiter);
 app.use(cors);
 app.use(router);
 app.use(errorLogger);

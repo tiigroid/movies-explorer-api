@@ -19,8 +19,8 @@ module.exports.validateSignUp = () => celebrate({
 
 module.exports.validateUserInfo = () => celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    email: Joi.string().email(),
+    name: Joi.string().required().min(2).max(30),
+    email: Joi.string().required().email(),
   }),
 });
 
@@ -32,7 +32,6 @@ module.exports.validateMovieId = () => celebrate({
 
 module.exports.validateMovieData = () => celebrate({
   body: Joi.object().keys({
-    owner: Joi.number().required(),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),

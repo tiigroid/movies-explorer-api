@@ -1,10 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { devJwtkey } = require('../utils/dev-config');
 const AuthorizationError = require('../utils/errors/AuthorizationError');
 const BadRequestError = require('../utils/errors/BadRequestError');
 const ConflictingRequestError = require('../utils/errors/ConflictingRequestError');
+const { errorMessages } = require('../utils/constants');
+const { devJwtkey } = require('../utils/dev-config');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -16,11 +17,11 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.send({ name: user.name, email }))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictingRequestError('Пользователь с таким email уже существует'));
+        next(new ConflictingRequestError(errorMessages.conflictEmail));
         return;
       }
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Введены неверные данные'));
+        next(new BadRequestError(errorMessages.badRequest));
         return;
       }
       next(err);
@@ -42,14 +43,24 @@ module.exports.editUserInfo = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .then((user) => res.send(user))
-    .catch((err) => (err.name === 'ValidationError' ? next(new BadRequestError('Введены неверные данные')) : next(err)));
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new ConflictingRequestError(errorMessages.conflictEmail));
+        return;
+      }
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError(errorMessages.badRequest));
+        return;
+      }
+      next(err);
+    });
 };
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   function handleAuthorizationError() {
-    throw new AuthorizationError('Неправильные почта или пароль');
+    throw new AuthorizationError(errorMessages.authWrongEmailOrPassword);
   }
 
   function createToken(user) {
