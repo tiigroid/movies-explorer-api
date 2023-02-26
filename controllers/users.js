@@ -4,7 +4,7 @@ const User = require('../models/user');
 const AuthorizationError = require('../utils/errors/AuthorizationError');
 const BadRequestError = require('../utils/errors/BadRequestError');
 const ConflictingRequestError = require('../utils/errors/ConflictingRequestError');
-const { errorMessages } = require('../utils/constants');
+const { resMessages, errorMessages } = require('../utils/constants');
 const { devJwtkey } = require('../utils/dev-config');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -82,5 +82,5 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.clearCookie('jwt').send({ message: 'Выход' });
+  res.clearCookie('jwt').send({ message: resMessages.signOut });
 };

@@ -1,8 +1,8 @@
 const routerMovies = require('express').Router();
 const { validateMovieId, validateMovieData } = require('../utils/validation');
-const { getAllMovies, createMovie, deleteMovieById } = require('../controllers/movies');
+const { getUserMovies, createMovie, deleteMovieById } = require('../controllers/movies');
 
-routerMovies.get('/', getAllMovies);
+routerMovies.get('/', getUserMovies);
 routerMovies.post('/', validateMovieData(), createMovie);
 routerMovies.delete('/:_id', validateMovieId(), deleteMovieById);
 

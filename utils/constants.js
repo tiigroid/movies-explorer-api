@@ -8,4 +8,10 @@ module.exports.errorMessages = {
   notFoundFilm: 'Фильм не найден',
   conflictEmail: 'Пользователь с таким email уже существует',
   serverError: 'На сервере произошла ошибка',
+  invalidURL: 'Некорректный URL',
+  invalidEmail: 'Некорректный email',
+};
+
+module.exports.resMessages = {
+  signOut: 'Выход',
 };

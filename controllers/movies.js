@@ -4,8 +4,10 @@ const ForbiddenError = require('../utils/errors/ForbiddenError');
 const BadRequestError = require('../utils/errors/BadRequestError');
 const { errorMessages } = require('../utils/constants');
 
-module.exports.getAllMovies = (req, res, next) => {
-  Movie.find({})
+module.exports.getUserMovies = (req, res, next) => {
+  const owner = req.user._id;
+
+  Movie.find({ owner })
     .then((movies) => (res.send(movies)))
     .catch(next);
 };
@@ -41,7 +43,7 @@ module.exports.createMovie = (req, res, next) => {
     thumbnail,
   })
     .then((movie) => res.send(movie))
-    .catch((err) => (err.name === 'ValidationError' ? next(new BadRequestError(errorMessages.badRequest)) : next(err)));
+    .catch((err) => (err.name === 'ValidationError' ? next(new BadRequestError(err.message)) : next(err)));
 };
 
 module.exports.deleteMovieById = (req, res, next) => {
